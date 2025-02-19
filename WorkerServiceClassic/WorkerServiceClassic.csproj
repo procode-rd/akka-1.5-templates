@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>dotnet-WorkerServiceClassic-bf489ea3-c354-4f44-b426-8a8172a4006b</UserSecretsId>
+        <RootNamespace>WorkerServiceClassic</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Akka" Version="1.5.38" />
+        <PackageReference Include="Akka.Logger.Serilog" Version="1.5.25" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.2"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="akka.config" />
+    </ItemGroup>
+</Project>

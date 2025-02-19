@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkerServiceClassic", "WorkerServiceClassic\WorkerServiceClassic.csproj", "{83DFD12C-3970-49B4-A3E2-277D821DDA0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkerServiceDI", "WorkerServiceDI\WorkerServiceDI.csproj", "{45C25613-30CD-4E9F-8902-1D9A2A519211}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkerServiceTests", "WorkerServiceTests\WorkerServiceTests.csproj", "{7B134711-2010-4327-A2ED-A913AB31BCF5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{83DFD12C-3970-49B4-A3E2-277D821DDA0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83DFD12C-3970-49B4-A3E2-277D821DDA0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83DFD12C-3970-49B4-A3E2-277D821DDA0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83DFD12C-3970-49B4-A3E2-277D821DDA0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45C25613-30CD-4E9F-8902-1D9A2A519211}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45C25613-30CD-4E9F-8902-1D9A2A519211}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45C25613-30CD-4E9F-8902-1D9A2A519211}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45C25613-30CD-4E9F-8902-1D9A2A519211}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B134711-2010-4327-A2ED-A913AB31BCF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B134711-2010-4327-A2ED-A913AB31BCF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B134711-2010-4327-A2ED-A913AB31BCF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B134711-2010-4327-A2ED-A913AB31BCF5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
