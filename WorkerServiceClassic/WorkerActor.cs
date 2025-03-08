@@ -27,6 +27,8 @@ public class WorkerActor : ReceiveActor
         var rng = new Random();
         TimeSpan parsingTime = TimeSpan.FromMilliseconds(rng.Next(2000, 4000));
         
+        Context.GetLogger().Debug($"Parsing time: {parsingTime}");
+        
         Thread.Sleep(parsingTime);
     }
 }
