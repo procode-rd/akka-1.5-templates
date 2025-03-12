@@ -6,19 +6,23 @@ namespace WorkerServiceClassic;
 
 public class ManagerActor : ReceiveActor
 {
+    private readonly IActorRefFactory _actorRefFactory;
+
     private record ResponseMessage;
     
     private record SuccessMessage(DoneMessage Message, IActorRef WorkerRef) : ResponseMessage;
 
     private record FailedMessage(string Input, IActorRef WorkerRef) : ResponseMessage;
     
-    public ManagerActor()
+    public ManagerActor(IActorRefFactory actorRefFactory)
     {
+        _actorRefFactory = actorRefFactory;
+        
         // pick one to test
-        //Receive<StartMessage>(StartMessageHandlerAsInBook);
+        Receive<StartMessage>(StartMessageHandlerAsInBook);
         //ReceiveAsync<StartMessage>(StartMessageHandlerSimpleAsync);
         //ReceiveAsync<StartMessage>(StartMessageHandlerRobustAsync);
-        Receive<StartMessage>(StartMessageHandlerAkkaWay);
+        //Receive<StartMessage>(StartMessageHandlerAkkaWay);
         
         Receive<SuccessMessage>(SuccessHandler);
         Receive<FailedMessage>(FailedHandler);
@@ -36,7 +40,7 @@ public class ManagerActor : ReceiveActor
         for (int i = 0; i < data.Texts.Length; i++)
         {
             string workerName = $"worker-{i}";
-            IActorRef workerRef = Context.ActorOf<WorkerActor>(workerName);
+            IActorRef workerRef = _actorRefFactory.ActorOf<WorkerActor>(workerName);
             
             string input = data.Texts[i];
             logger.Info("sending text {0} to worker {1}", input, workerRef);
