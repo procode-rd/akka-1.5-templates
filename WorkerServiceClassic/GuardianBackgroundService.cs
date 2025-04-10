@@ -2,11 +2,11 @@ using Akka.Actor;
 
 namespace WorkerServiceClassic;
 
-public class Guardian : BackgroundService
+public class GuardianBackgroundService : BackgroundService
 {
-    private readonly ILogger<Guardian> _logger;
+    private readonly ILogger<GuardianBackgroundService> _logger;
 
-    public Guardian(ILogger<Guardian> logger)
+    public GuardianBackgroundService(ILogger<GuardianBackgroundService> logger)
     {
         _logger = logger;
     }
@@ -20,9 +20,9 @@ public class Guardian : BackgroundService
         {
             _logger.LogInformation("setting up. Creating manager");
             
-            IActorRef managerRef = guardian.ActorOf(Props.Create<ManagerActor>(), "Manager");
+            IActorRef logProcessingGuardianRef = guardian.ActorOf(Props.Create<LogProcessingGuardianActor>(), "LogProcessingGuardian");
 
-            managerRef.Tell(new StartMessage(["--one--", "--two--"]));
+            logProcessingGuardianRef.Tell(new LogProcessingGuardianActor.WatchFolderMessage(Environment.CurrentDirectory));
             
             while (!stoppingToken.IsCancellationRequested)
             {
