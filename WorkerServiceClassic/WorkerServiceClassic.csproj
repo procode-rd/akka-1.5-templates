@@ -17,4 +17,10 @@
     <ItemGroup>
       <Content Remove="akka.config" />
     </ItemGroup>
+
+    <ItemGroup>
+      <None Update="app.conf">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
 </Project>

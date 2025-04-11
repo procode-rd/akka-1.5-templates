@@ -33,7 +33,7 @@ public sealed class LogProcessingGuardianActor : ReceiveActor
                     minBackoff: TimeSpan.Zero,
                     maxBackoff: TimeSpan.FromSeconds(10),
                     randomFactor: 0,
-                    strategy:new OneForOneStrategy(DatabaseWriterSupervisorDecider, loggingEnabled: true)),
+                    strategy:new OneForOneStrategy(ex => LoggedSupervisorDecider(DatabaseWriterSupervisorDecider, ex), loggingEnabled: true)),
                 name: "DatabaseWriterSupervisor");
         }
 
@@ -44,7 +44,7 @@ public sealed class LogProcessingGuardianActor : ReceiveActor
                 minBackoff: TimeSpan.Zero, 
                 maxBackoff: TimeSpan.Zero, 
                 randomFactor: 0,
-                strategy: new OneForOneStrategy(FileWatcherSupervisionDecider, loggingEnabled: true)),
+                strategy: new OneForOneStrategy(ex => LoggedSupervisorDecider(FileWatcherSupervisionDecider, ex), loggingEnabled: true)),
             name: "FileWatcherSupervisor");
         
         Context.GetLogger().Info("New actor watching file path: {0} of name `{1}` has been started", msg.Path, fileWatcherActorRef.Path);
@@ -57,7 +57,7 @@ public sealed class LogProcessingGuardianActor : ReceiveActor
     {
         string actorName = BuildActorName("LogProcessor_", Path.GetFileName(path));
         
-        IActorRef child = _selfActorContext.Child(actorName);
+        IActorRef child = _selfActorContext.Child(actorName + "_Supervisor");
 
         if (!child.Equals(Nobody.Instance))
         {
@@ -71,7 +71,7 @@ public sealed class LogProcessingGuardianActor : ReceiveActor
                 minBackoff: TimeSpan.Zero, 
                 maxBackoff: TimeSpan.Zero,
                 randomFactor: 0,
-                strategy: new OneForOneStrategy(LogProcessorSupervisorDecider, loggingEnabled: true)),
+                strategy: new OneForOneStrategy(ex => LoggedSupervisorDecider(LogProcessorSupervisorDecider, ex), loggingEnabled: true)),
             name: actorName + "_Supervisor");
     }
     
@@ -118,14 +118,22 @@ public sealed class LogProcessingGuardianActor : ReceiveActor
             case DatabaseException dbe:
                 return dbe.Type switch
                 {
-                    DatabaseExceptionType.Transient => Directive.Resume,
+                    DatabaseExceptionType.Transient => Directive.Restart, // reinitialize+reconnect
                     DatabaseExceptionType.ErrorInQuery => Directive.Resume,
-                    _ => Directive.Restart,
+                    _ => Directive.Escalate, // unexpected things happens 
                 };
                 
             default:
-                return Directive.Escalate;
+                return Directive.Escalate; // unexpected things happens
         }
     }
+    
+    private Directive LoggedSupervisorDecider(Func<Exception, Directive> handler, Exception ex)
+    {
+        Directive decision = handler(ex);
+        
+        Context.GetLogger().Info("Supervision decider called: {0}. It's decision for exception of type {1} was {2}", handler.Method.Name, ex.GetType().FullName, decision);
 
+        return decision;
+    }
 }

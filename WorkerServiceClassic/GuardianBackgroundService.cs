@@ -14,8 +14,10 @@ public class GuardianBackgroundService : BackgroundService
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         _logger.LogInformation("Starting guardian");
-        
-        ActorSystem guardian = ActorSystem.Create("Guardian", "akka.loglevel=DEBUG");
+
+        string hocon = await File.ReadAllTextAsync("app.conf", stoppingToken);
+
+        ActorSystem guardian = ActorSystem.Create("Guardian", hocon);
         try
         {
             _logger.LogInformation("setting up. Creating manager");
